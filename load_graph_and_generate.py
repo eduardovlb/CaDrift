@@ -47,24 +47,8 @@ elif type == 'endogenous':
         ('endogenous', 'gradual'),
         ('endogenous', 'incremental'),
         ('recurrent', 'abrupt'),
-        ('recurrent', 'gradual')     # recurrent should be abrupt or gradual, but always after a previous drift
+        ('recurrent', 'gradual')
     ]
-
-# valid_combinations = [
-#     ('exogenous', 'abrupt'),
-#     ('exogenous', 'gradual'),
-#     ('exogenous', 'incremental'),
-#     ('recurrent', 'abrupt'),
-#     ('recurrent', 'gradual')
-# ]
-
-# valid_combinations = [
-#     ('target', 'abrupt'),
-#     ('target', 'gradual'),
-#     ('target', 'incremental'),
-#     ('recurrent', 'abrupt'),
-#     ('recurrent', 'gradual')
-# ]
 
 # Parameters
 max_samples = 1000000
