@@ -3,6 +3,7 @@ import pandas as pd
 import random
 from DAG_Utils import build_er_dag
 from DAG_Utils import extract_graph_statistics
+import os
 
 import numpy as np
 
@@ -95,6 +96,10 @@ for i, p in enumerate(drift_points):
     drift_types.append(drift_type)
     drift_types_time.append(drift_time)
     drift_sizes.append(size)
+
+# create generated_datasets directory if it doesn't exist
+if not os.path.exists('generated_datasets'):
+    os.makedirs('generated_datasets')
 
 print("Generated drift events:")
 for p, s, t, tt in zip(drift_points, drift_sizes, drift_types, drift_types_time):
