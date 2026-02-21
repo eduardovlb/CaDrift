@@ -638,12 +638,8 @@ class PrototypeCategoricalMapper(AbstractCategoricalMapper):
 
         self.n_parents = X.shape[1]
         
-        # self.n_classes = self._sample_K()
-        # self.K = np.random.randint(self.n_classes, self.max_classes+1)
-        # self.K = self.n_classes * 2
-        
-        self.n_classes = 5
-        self.K = 20
+        self.n_classes = self._sample_K()
+        self.K = np.random.randint(self.n_classes, self.max_classes+1)
 
         self.prototype_to_class = np.random.choice(self.n_classes, size = self.K)
 
@@ -998,11 +994,8 @@ class OnlineGaussianCategoricalMapper(AbstractCategoricalMapper):
         if X is None:
             raise ValueError("X must not be None")
         self.n_parents = X.shape[1]
-        # self.n_classes = self._sample_K()
-        # self.K = np.random.randint(self.n_classes, self.max_classes+1)
-
-        self.n_classes = 5
-        self.K = 20
+        self.n_classes = self._sample_K()
+        self.K = np.random.randint(self.n_classes, self.max_classes+1)
         
         self.component_to_class = np.random.choice(self.n_classes, size=self.K)
 
@@ -1155,11 +1148,8 @@ class RandomRBFCategoricalMapper(AbstractCategoricalMapper):
         if X is None:
             raise ValueError("X must not be None")
         self.n_parents = X.shape[1]
-        # self.n_classes = self._sample_K()
-        # self.K = np.random.randint(self.n_classes, self.max_classes+1)
-
-        self.n_classes = 5
-        self.K = 20
+        self.n_classes = self._sample_K()
+        self.K = np.random.randint(self.n_classes, self.max_classes+1)
 
         self.component_to_class = np.random.choice(self.n_classes, size=self.K)
 
