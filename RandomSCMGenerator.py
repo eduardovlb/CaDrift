@@ -15,10 +15,9 @@ seed = np.random.randint(0, 10000)
 random.seed(seed)
 
 # Generate DAG and datasets
-dataset_num = '002'
 graph, label_node = build_er_dag(n_features=20, p_edge=0.3, task='classification', ensure_label_parents=False, n_confounders=2, create_confounder=True, seed=seed)
 
-print(f"Random seed for dataset {dataset_num}: {seed}")
+print(f"Random seed for dataset: {seed}")
 
 type = 'target'
 
@@ -89,10 +88,10 @@ print("Generated drift events:")
 for p, s, t, tt in zip(drift_points, drift_sizes, drift_types, drift_types_time):
     # print(f"Point: {p}, Size: {s}, Type: {t}, Time: {tt}")
     # Write to file
-    with open(f'generated_datasets/dataset_{dataset_num}_drift_events_{type}.txt', 'a') as f:
+    with open(f'generated_datasets/data_sample.txt', 'a') as f:
         f.write(f"Point: {p}, Size: {s}, Type: {t}, Time: {tt}\n")
 
-print(f"\nGenerating Data for Graph #{dataset_num} ...")
+print(f"\nGenerating Data for Graph ...")
 df = pd.DataFrame(graph.generate(
     max_samples,
     intervention_prob=0,
@@ -105,15 +104,15 @@ df = pd.DataFrame(graph.generate(
 
 print(df.loc[:, 'y'].value_counts())
 
-graph.save_graph(f"generated_datasets/graph_{dataset_num}_{type}_checkpoint.pkl")
-graph.save_graph_to_json(f'generated_datasets/dataset_{dataset_num}_graph_{type}.json', seed=seed)
-df.to_csv(f'generated_datasets/dataset_{dataset_num}_drifted_{type}.csv', index=False)
-graph.save_drift_events_to_json(f'generated_datasets/dataset_{dataset_num}_drift_events_{type}.json')
+graph.save_graph(f"generated_datasets/data_sample_checkpoint.pkl")
+graph.save_graph_to_json(f'generated_datasets/data_sample_graph.json', seed=seed)
+df.to_csv(f'generated_datasets/data_sample_drifted.csv', index=False)
+graph.save_drift_events_to_json(f'generated_datasets/data_sample_drift_events.json')
 
 stats = extract_graph_statistics(graph)
 
 import json
 
 # Save stats to JSON
-with open(f'generated_datasets/dataset_{dataset_num}_stats_{type}.json', 'w') as f:
+with open(f'generated_datasets/data_sample_stats.json', 'w') as f:
     json.dump(stats, f, indent=4)
