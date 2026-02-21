@@ -117,7 +117,3 @@ import json
 # Save stats to JSON
 with open(f'generated_datasets/dataset_{dataset_num}_stats_{type}.json', 'w') as f:
     json.dump(stats, f, indent=4)
-
-# to arff
-import csv_to_arff
-csv_to_arff.csv_to_arff(f'generated_datasets/dataset_{dataset_num}_drifted_{type}.csv', f'generated_datasets/dataset_{dataset_num}_drifted_{type}.arff')
