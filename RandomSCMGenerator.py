@@ -31,11 +31,11 @@ if type == 'virtual':
         ('recurrent', 'abrupt'),
         ('recurrent', 'gradual')
     ]
-elif type == 'target':
+elif type == 'severe':
     valid_combinations = [
-        ('target', 'abrupt'),
-        ('target', 'gradual'),
-        ('target', 'incremental'),
+        ('severe', 'abrupt'),
+        ('severe', 'gradual'),
+        ('severe', 'incremental'),
         ('recurrent', 'abrupt'),
         ('recurrent', 'gradual')
     ]
