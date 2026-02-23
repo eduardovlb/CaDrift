@@ -19,15 +19,15 @@ graph, label_node = build_er_dag(n_features=20, p_edge=0.3, task='classification
 
 print(f"Random seed for dataset: {seed}")
 
-type = 'target'
+type = 'real'
 
 # Only valid type/time combinations
 
-if type == 'exogenous':
+if type == 'virtual':
     valid_combinations = [
-        ('exogenous', 'abrupt'),
-        ('exogenous', 'gradual'),
-        ('exogenous', 'incremental'),
+        ('virtual', 'abrupt'),
+        ('virtual', 'gradual'),
+        ('virtual', 'incremental'),
         ('recurrent', 'abrupt'),
         ('recurrent', 'gradual')
     ]
@@ -40,17 +40,17 @@ elif type == 'target':
         ('recurrent', 'gradual')
     ]
 
-elif type == 'endogenous':  
+elif type == 'real':  
     valid_combinations = [
-        ('endogenous', 'abrupt'),
-        ('endogenous', 'gradual'),
-        ('endogenous', 'incremental'),
+        ('real', 'abrupt'),
+        ('real', 'gradual'),
+        ('real', 'incremental'),
         ('recurrent', 'abrupt'),
         ('recurrent', 'gradual')
     ]
 
 # Parameters
-max_samples = 1000000
+max_samples = 100000
 len_min = 50
 len_max = 500
 
@@ -88,7 +88,7 @@ print("Generated drift events:")
 for p, s, t, tt in zip(drift_points, drift_sizes, drift_types, drift_types_time):
     # print(f"Point: {p}, Size: {s}, Type: {t}, Time: {tt}")
     # Write to file
-    with open(f'generated_datasets/data_sample.txt', 'a') as f:
+    with open(f'generated_datasets/data_sample_drift_events.txt', 'a') as f:
         f.write(f"Point: {p}, Size: {s}, Type: {t}, Time: {tt}\n")
 
 print(f"\nGenerating Data for Graph ...")

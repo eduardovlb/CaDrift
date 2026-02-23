@@ -254,8 +254,8 @@ class CausalGraph:
 
         self.is_trained = True
             
-    def endogenous_drift(self, incremental: bool = False) -> None:
-        """Applies endogenous drift to selected nodes. If incremental is True, applies incremental drift."""
+    def real_drift(self, incremental: bool = False) -> None:
+        """Applies real drift to selected nodes. If incremental is True, applies incremental drift."""
         sorted_vertices = self.topological_sort()
 
         self.drifted_nodes = []
@@ -328,8 +328,8 @@ class CausalGraph:
         }
         self.concept_history.append(concept_snapshot)
 
-    def exogenous_drift(self) -> None:
-        """Applies exogenous drift to selected root nodes."""
+    def virtual_drift(self) -> None:
+        """Applies virtual drift to selected root nodes."""
         # num_nodes_drifted = random.randint(1,3)
         num_nodes_drifted = 1
         candidate_nodes = [v for v in self.vertices.values() if v.is_root()]
@@ -418,65 +418,11 @@ class CausalGraph:
             node.mapper = target_past_mapper
 
 
-    def target_drift(self, incremental: bool = False) -> None:
-        """Applies target drift to selected nodes. If incremental is True, applies incremental drift."""
-        label_node = self.vertices.get('y', None)
-
-        if label_node is None:
-            print("No label node 'y' found for severe drift.")
-            return
-        
-        before_mapper = copy.deepcopy(label_node.mapper)
-
-        if not incremental:
-            # abrupt drift
-            label_node.mapper.drift()
-        else:
-            label_node.mapper.start_incremental_drift()
-
-        # selected_nodes.append(drifted_node)
-        self.drifted_nodes.append(label_node)
-                
-        label_node.drift_history.append(copy.deepcopy(before_mapper))
-
-        if not hasattr(self, 'concept_history'):
-            self.concept_history = []
-
-        concept_snapshot = {
-            "nodes": [label_node],
-            "mappers": {node.name: copy.deepcopy(node.drift_history[-1]) for node in [label_node]}
-        }
-        self.concept_history.append(concept_snapshot)
-
-
-    # Should finish this call
-    # def counfounder_drift(self, incremental: bool = False) -> None:
-    #     candidate_nodes = []
-
-    #     target_node: Vertex = self.vertices.get('y', None)
-
-    #     candidate_nodes = target_node.get_parents()
-
-    #     # Candidate nodes should also be cause of other nodes.
-
-    #     for node in candidate_nodes:
-    #         if node.is_leaf():
-    #             candidate_nodes.remove(node)
-        
-    #     # Confounder drift to only one node
-    #     node_to_drift: Vertex = np.random.choice(candidate_nodes)
-
-    #     # Get confounder drift idx
-    #     confounder_idx = node_to_drift.children
-
-
     def simulate(self) -> None:
         """Computes values for all vertices in topological order."""
         for name in self.topological_sort():
             vertex = self.vertices[name]
-            vertex.compute_value()
-
-    
+            vertex.compute_value()    
 
     def generate(self, dataset_size: int = 1000, intervention_prob: float = 0.05, drift_points: list = [], drift_sizes: list = [], drift_types: list = [], drift_types_time: list = [], missing_prob: float = 0.05) -> dict:
         """Generates samples from the causal graph with drift and interventions.
@@ -525,21 +471,18 @@ class CausalGraph:
                 drift_type_name = drift_types[drift]
                 drift_time_type_name = drift_types_time[drift] if drift < len(drift_types_time) else 'abrupt'
                 
-                if drift_type_name == 'endogenous':
-                    self.endogenous_drift(drift_time_type_name == 'incremental')
-                    self._record_drift_event(n, 'endogenous', drift_time_type_name, self.drifted_nodes)
-                elif drift_type_name == 'exogenous':
-                    self.exogenous_drift()
-                    self._record_drift_event(n, 'exogenous', drift_time_type_name, self.drifted_nodes)
+                if drift_type_name == 'real':
+                    self.real_drift(drift_time_type_name == 'incremental')
+                    self._record_drift_event(n, 'real', drift_time_type_name, self.drifted_nodes)
+                elif drift_type_name == 'virtual':
+                    self.virtual_drift()
+                    self._record_drift_event(n, 'virtual', drift_time_type_name, self.drifted_nodes)
                 elif drift_type_name == 'recurrent':
                     self.recurrent_drift()
                     self._record_drift_event(n, 'recurrent', drift_time_type_name, self.drifted_nodes)
                 elif drift_type_name == 'severe':
                     self.severe_drift()
                     self._record_drift_event(n, 'severe', drift_time_type_name, self.drifted_nodes)
-                elif drift_type_name == 'target':
-                    self.target_drift(drift_time_type_name == 'incremental')
-                    self._record_drift_event(n, 'target', drift_time_type_name, self.drifted_nodes)
 
             for v in self.vertices.values():
                 v.value = None

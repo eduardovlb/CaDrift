@@ -186,33 +186,6 @@ class FunctionMapper(IncrementalMapping):
 
     def is_fitted(self) -> bool:
         return self.fitted
-    
-    # Function Mapper with Linear or Polynomial function is the only who supports structural drift so far
-    def structural_drift(self) -> None:
-        if not (isinstance(self.label_function, LinearFunction) or isinstance(self.label_function, PolynomialFunction)):
-            return f"Structural drift not supported for this mapper."
-
-        for i in range(self.a):
-            if self.a[i] == 0: # Include new node if any weight is zero
-                direction = np.random.choice([-1,1])
-                self.a[i] += direction*np.random.rand()
-                return
-            
-        # Remove the influence of a random parent.
-        idx_to_remove = np.random.choice(list(range(len(self.a))))
-        self.a[idx_to_remove] = 0
-
-    # def counfounder_drift(self, confounder_node_idx: int = None):
-    #     if confounder_node_idx is None:
-    #         return # No node to drift
-        
-    #     if isinstance(self.label_function, LinearFunction):
-    #         confounder_drift_direction = np.random.choice([-1, 1])
-    #         self.a[confounder_node_idx] += confounder_drift_direction*np.random.rand()
-    #         return
-        
-    #     # If function is not linear, simply change the label function (a more 'severe' confounder drift, work as an endogenous drift as well.)
-    #     self.drift()
 
     
     def generate_untrained_example(self, X: np.ndarray) -> float:
