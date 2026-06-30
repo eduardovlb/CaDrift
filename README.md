@@ -106,3 +106,19 @@ Refer to `SCM/Mappers.py` for implementation details and exact constructor param
 - connecting vertices using `graph.add_edge(parent, child)`
 - visualizing the graph using `graph.visualize_graph()`
 - applying targeted drift by calling mapper methods such as `mapper.drift()`, `mapper.severe_drift()`, or via helper functions in the graph (e.g., `drift_node` in the example script)
+
+- ## Citation
+
+If you use this project in your research, please cite:
+
+```bibtex
+@misc{barboza2026cadrifttimedependentcausalgenerator,
+      title={CaDrift: A Time-dependent Causal Generator of Drifting Data Streams}, 
+      author={Eduardo V. L. Barboza and Jean Paul Barddal and Robert Sabourin and Rafael M. O. Cruz},
+      year={2026},
+      eprint={2602.20329},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2602.20329}
+}
+```
